@@ -14,11 +14,11 @@ CharacterModel _$CharacterModelFromJson(Map<String, dynamic> json) =>
       species: json['species'] as String,
       type: json['type'] as String,
       gender: json['gender'] as String,
-      origin: json['origin'] as String,
-      location: json['location'] as String,
+      origin: OriginCharacterModel.fromJson(json['origin']),
+      location: LocationCharacterModel.fromJson(json['location']),
       image: json['image'] as String,
-      episodes:
-          (json['episodes'] as List<dynamic>).map((e) => e as String).toList(),
+      episode:
+          (json['episode'] as List<dynamic>).map((e) => e as String).toList(),
       url: json['url'] as String,
       created: json['created'] as String,
     );
@@ -34,7 +34,35 @@ Map<String, dynamic> _$CharacterModelToJson(CharacterModel instance) =>
       'origin': instance.origin,
       'location': instance.location,
       'image': instance.image,
-      'episodes': instance.episodes,
+      'episode': instance.episode,
       'url': instance.url,
       'created': instance.created,
+    };
+
+LocationCharacterModel _$LocationCharacterModelFromJson(
+        Map<String, dynamic> json) =>
+    LocationCharacterModel(
+      name: json['name'] as String,
+      url: json['url'] as String,
+    );
+
+Map<String, dynamic> _$LocationCharacterModelToJson(
+        LocationCharacterModel instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'url': instance.url,
+    };
+
+OriginCharacterModel _$OriginCharacterModelFromJson(
+        Map<String, dynamic> json) =>
+    OriginCharacterModel(
+      name: json['name'] as String,
+      url: json['url'] as String,
+    );
+
+Map<String, dynamic> _$OriginCharacterModelToJson(
+        OriginCharacterModel instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'url': instance.url,
     };

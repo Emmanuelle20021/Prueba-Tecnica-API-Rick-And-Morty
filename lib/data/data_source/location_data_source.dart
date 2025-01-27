@@ -1,16 +1,16 @@
-import 'package:dio/dio.dart';
 import 'package:prueba_tecnica_flutter_senior/data/models/location_model.dart';
+import 'package:prueba_tecnica_flutter_senior/data/utils/dio_client.dart';
 
 class LocationDataSource {
-  final Dio dio;
+  final DioClient dioClient;
 
-  LocationDataSource(this.dio);
+  LocationDataSource(this.dioClient);
 
-  final String _baseUrl = 'https://rickandmortyapi.com/api/location';
+  final String _baseUrl = 'https://rickandmortyapi.com/api';
 
   Future<LocationModel> getLocation(int id) async {
     try {
-      final response = await dio.get('$_baseUrl/location/$id');
+      final response = await dioClient.dio.get('$_baseUrl/location/$id');
       final location = LocationModel.fromJson(response.data);
       return location;
     } catch (e) {
@@ -28,7 +28,7 @@ class LocationDataSource {
 
   Stream<List<LocationModel>> getLocations() async* {
     try {
-      final response = await dio.get('$_baseUrl/character');
+      final response = await dioClient.dio.get('$_baseUrl/character');
       final List<LocationModel> locations = (response.data['results'] as List)
           .map((json) => LocationModel.fromJson(json))
           .toList();

@@ -11,10 +11,10 @@ class CharacterModel {
   final String species;
   final String type;
   final String gender;
-  final String origin;
-  final String location;
+  final OriginCharacterModel origin;
+  final LocationCharacterModel location;
   final String image;
-  final List<String> episodes;
+  final List<String> episode;
   final String url;
   final String created;
 
@@ -28,17 +28,16 @@ class CharacterModel {
     required this.origin,
     required this.location,
     required this.image,
-    required this.episodes,
+    required this.episode,
     required this.url,
     required this.created,
   });
 
-  factory CharacterModel.fromJson(Map<String, dynamic> json) =>
-      _$CharacterModelFromJson(json);
+  factory CharacterModel.fromJson(json) => _$CharacterModelFromJson(json);
 
   toJson() => _$CharacterModelToJson(this);
 
-  static List<CharacterModel> fromJsonList(List<Map<String, dynamic>> list) {
+  static List<CharacterModel> fromJsonList(list) {
     return list.map((item) => CharacterModel.fromJson(item)).toList();
   }
 
@@ -47,10 +46,42 @@ class CharacterModel {
         status: status,
         species: species,
         type: type,
-        episodes: episodes,
+        episodes: episode,
         gender: gender,
-        origin: origin,
-        location: location,
+        origin: origin.name,
+        location: location.name,
         image: image,
       );
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class LocationCharacterModel {
+  final String name;
+  final String url;
+
+  LocationCharacterModel({
+    required this.name,
+    required this.url,
+  });
+
+  factory LocationCharacterModel.fromJson(json) =>
+      _$LocationCharacterModelFromJson(json);
+
+  toJson() => _$LocationCharacterModelToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class OriginCharacterModel {
+  final String name;
+  final String url;
+
+  OriginCharacterModel({
+    required this.name,
+    required this.url,
+  });
+
+  factory OriginCharacterModel.fromJson(json) =>
+      _$OriginCharacterModelFromJson(json);
+
+  toJson() => _$OriginCharacterModelToJson(this);
 }

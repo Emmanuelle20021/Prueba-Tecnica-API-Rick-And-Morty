@@ -1,10 +1,11 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:prueba_tecnica_flutter_senior/data/models/character_model.dart';
+import 'package:prueba_tecnica_flutter_senior/data/utils/dio_client.dart';
 
 class CharacterDataSource {
-  final Dio dio;
+  final DioClient dioClient;
 
-  CharacterDataSource(this.dio);
+  CharacterDataSource(this.dioClient);
 
   // URL base de la API
   final String _baseUrl = 'https://rickandmortyapi.com/api';
@@ -12,12 +13,13 @@ class CharacterDataSource {
   // Obtener todos los personajes
   Stream<List<CharacterModel>> getCharactersStream() async* {
     try {
-      final response = await dio.get('$_baseUrl/character');
-      final List<CharacterModel> characters = (response.data['results'] as List)
-          .map((json) => CharacterModel.fromJson(json))
-          .toList();
+      final response = await dioClient.dio.get('$_baseUrl/character');
+      final results = response.data['results'] as List;
+      final List<CharacterModel> characters =
+          results.map((json) => CharacterModel.fromJson(json)).toList();
       yield characters;
     } catch (e) {
+      debugPrint('Error: $e');
       yield []; // Retorna una lista vacía en caso de error
     }
   }
@@ -25,7 +27,7 @@ class CharacterDataSource {
   // Obtener un solo personaje
   Future<CharacterModel> getCharacter(int id) async {
     try {
-      final response = await dio.get('$_baseUrl/character/$id');
+      final response = await dioClient.dio.get('$_baseUrl/character/$id');
       final character = CharacterModel.fromJson(response.data);
       return character;
     } catch (e) {
@@ -36,10 +38,10 @@ class CharacterDataSource {
         species: 'none',
         type: 'none',
         gender: 'none',
-        origin: 'none',
-        location: 'none',
+        origin: OriginCharacterModel(name: 'none', url: 'none'),
+        location: LocationCharacterModel(name: 'none', url: 'none'),
         image: 'none',
-        episodes: [],
+        episode: [],
         created: 'none',
         url: 'none',
       ); // Retorna un personaje ficticio en caso de error
@@ -50,7 +52,7 @@ class CharacterDataSource {
   Stream<List<CharacterModel>> getCharactersByEpisodeStream(
       String episode) async* {
     try {
-      final response = await dio.get('$_baseUrl/episode/$episode');
+      final response = await dioClient.dio.get('$_baseUrl/episode/$episode');
       final List<CharacterModel> characters = (response.data['results'] as List)
           .map((json) => CharacterModel.fromJson(json))
           .toList();
@@ -64,7 +66,7 @@ class CharacterDataSource {
   Stream<List<CharacterModel>> getCharactersByLocationStream(
       String location) async* {
     try {
-      final response = await dio.get('$_baseUrl/location/$location');
+      final response = await dioClient.dio.get('$_baseUrl/location/$location');
       final List<CharacterModel> characters = (response.data['results'] as List)
           .map((json) => CharacterModel.fromJson(json))
           .toList();
@@ -78,7 +80,7 @@ class CharacterDataSource {
   Stream<List<CharacterModel>> getCharactersByStatusStream(
       String status) async* {
     try {
-      final response = await dio
+      final response = await dioClient.dio
           .get('$_baseUrl/character', queryParameters: {'status': status});
       final List<CharacterModel> characters = (response.data['results'] as List)
           .map((json) => CharacterModel.fromJson(json))
@@ -93,7 +95,7 @@ class CharacterDataSource {
   Stream<List<CharacterModel>> getCharactersBySpeciesStream(
       String species) async* {
     try {
-      final response = await dio
+      final response = await dioClient.dio
           .get('$_baseUrl/character', queryParameters: {'species': species});
       final List<CharacterModel> characters = (response.data['results'] as List)
           .map((json) => CharacterModel.fromJson(json))
@@ -107,8 +109,8 @@ class CharacterDataSource {
   // Filtrar por tipo
   Stream<List<CharacterModel>> getCharactersByTypeStream(String type) async* {
     try {
-      final response =
-          await dio.get('$_baseUrl/character', queryParameters: {'type': type});
+      final response = await dioClient.dio
+          .get('$_baseUrl/character', queryParameters: {'type': type});
       final List<CharacterModel> characters = (response.data['results'] as List)
           .map((json) => CharacterModel.fromJson(json))
           .toList();

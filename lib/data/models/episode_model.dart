@@ -19,12 +19,11 @@ class EpisodeModel {
     required this.characters,
   });
 
-  factory EpisodeModel.fromJson(Map<String, dynamic> json) =>
-      _$EpisodeModelFromJson(json);
+  factory EpisodeModel.fromJson(json) => _$EpisodeModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$EpisodeModelToJson(this);
 
-  static List<EpisodeModel> fromJsonList(List<Map<String, dynamic>> list) {
+  static List<EpisodeModel> fromJsonList(list) {
     return list.map((item) => EpisodeModel.fromJson(item)).toList();
   }
 

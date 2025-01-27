@@ -23,12 +23,11 @@ class LocationModel {
     required this.created,
   });
 
-  factory LocationModel.fromJson(Map<String, dynamic> json) =>
-      _$LocationModelFromJson(json);
+  factory LocationModel.fromJson(json) => _$LocationModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationModelToJson(this);
 
-  static List<LocationModel> fromJsonList(List<Map<String, dynamic>> list) {
+  static List<LocationModel> fromJsonList(list) {
     return list.map((item) => LocationModel.fromJson(item)).toList();
   }
 

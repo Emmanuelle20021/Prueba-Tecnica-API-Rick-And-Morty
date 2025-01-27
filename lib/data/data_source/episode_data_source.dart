@@ -1,16 +1,16 @@
-import 'package:dio/dio.dart';
 import 'package:prueba_tecnica_flutter_senior/data/models/episode_model.dart';
+import 'package:prueba_tecnica_flutter_senior/data/utils/dio_client.dart';
 
 class EpisodeDataSource {
-  final Dio dio;
+  final DioClient dioClient;
 
-  EpisodeDataSource(this.dio);
+  EpisodeDataSource(this.dioClient);
 
-  final String _baseUrl = 'https://rickandmortyapi.com/api/episode';
+  final String _baseUrl = 'https://rickandmortyapi.com/api/';
 
   Future<EpisodeModel> getEpisode(int episodeId) async {
     try {
-      final response = await dio.get('$_baseUrl/episode/$episodeId');
+      final response = await dioClient.dio.get('$_baseUrl/episode/$episodeId');
       final episode = EpisodeModel.fromJson(response.data);
       return episode;
     } catch (e) {
@@ -26,7 +26,7 @@ class EpisodeDataSource {
 
   Stream<List<EpisodeModel>> getEpisodes() async* {
     try {
-      final response = await dio.get('$_baseUrl/episode');
+      final response = await dioClient.dio.get('$_baseUrl/episode');
       final List<EpisodeModel> episodes = (response.data['results'] as List)
           .map((json) => EpisodeModel.fromJson(json))
           .toList();
