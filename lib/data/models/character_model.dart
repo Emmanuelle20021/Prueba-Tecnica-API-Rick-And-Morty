@@ -46,7 +46,6 @@ class CharacterModel {
         status: status,
         species: species,
         type: type,
-        episodes: episode,
         gender: gender,
         origin: origin.name,
         location: location.name,

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 import 'package:prueba_tecnica_flutter_senior/data/models/character_model.dart';
 import 'package:prueba_tecnica_flutter_senior/data/utils/dio_client.dart';
 
@@ -18,9 +18,8 @@ class CharacterDataSource {
       final List<CharacterModel> characters =
           results.map((json) => CharacterModel.fromJson(json)).toList();
       yield characters;
-    } catch (e) {
-      debugPrint('Error: $e');
-      yield []; // Retorna una lista vacía en caso de error
+    } on DioException {
+      rethrow;
     }
   }
 
@@ -53,64 +52,6 @@ class CharacterDataSource {
       String episode) async* {
     try {
       final response = await dioClient.dio.get('$_baseUrl/episode/$episode');
-      final List<CharacterModel> characters = (response.data['results'] as List)
-          .map((json) => CharacterModel.fromJson(json))
-          .toList();
-      yield characters;
-    } catch (e) {
-      yield [];
-    }
-  }
-
-  // Filtrar por ubicación
-  Stream<List<CharacterModel>> getCharactersByLocationStream(
-      String location) async* {
-    try {
-      final response = await dioClient.dio.get('$_baseUrl/location/$location');
-      final List<CharacterModel> characters = (response.data['results'] as List)
-          .map((json) => CharacterModel.fromJson(json))
-          .toList();
-      yield characters;
-    } catch (e) {
-      yield [];
-    }
-  }
-
-  // Filtrar por estado
-  Stream<List<CharacterModel>> getCharactersByStatusStream(
-      String status) async* {
-    try {
-      final response = await dioClient.dio
-          .get('$_baseUrl/character', queryParameters: {'status': status});
-      final List<CharacterModel> characters = (response.data['results'] as List)
-          .map((json) => CharacterModel.fromJson(json))
-          .toList();
-      yield characters;
-    } catch (e) {
-      yield [];
-    }
-  }
-
-  // Filtrar por especie
-  Stream<List<CharacterModel>> getCharactersBySpeciesStream(
-      String species) async* {
-    try {
-      final response = await dioClient.dio
-          .get('$_baseUrl/character', queryParameters: {'species': species});
-      final List<CharacterModel> characters = (response.data['results'] as List)
-          .map((json) => CharacterModel.fromJson(json))
-          .toList();
-      yield characters;
-    } catch (e) {
-      yield [];
-    }
-  }
-
-  // Filtrar por tipo
-  Stream<List<CharacterModel>> getCharactersByTypeStream(String type) async* {
-    try {
-      final response = await dioClient.dio
-          .get('$_baseUrl/character', queryParameters: {'type': type});
       final List<CharacterModel> characters = (response.data['results'] as List)
           .map((json) => CharacterModel.fromJson(json))
           .toList();
